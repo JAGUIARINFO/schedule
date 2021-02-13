@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  datareserva: 2021-02-04
+  horareserva: 1
+  descricao: MyText
+
+two:
+  user: two
+  datareserva: 2021-02-04
+  horareserva: 1
+  descricao: MyText

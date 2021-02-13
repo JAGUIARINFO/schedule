@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @booking.user %>
+</p>
+
+<p>
+  <strong>Datareserva:</strong>
+  <%= @booking.datareserva %>
+</p>
+
+<p>
+  <strong>Horareserva:</strong>
+  <%= @booking.horareserva %>
+</p>
+
+<p>
+  <strong>Descricao:</strong>
+  <%= @booking.descricao %>
+</p>
+
+<%= link_to 'Edit', edit_booking_path(@booking) %> |
+<%= link_to 'Back', bookings_path %>

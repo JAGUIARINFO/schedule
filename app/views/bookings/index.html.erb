@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body style="background-color:#1C2331;">
+
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      <title>Teste de Login</title>
+      <!-- Font Awesome -->
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+      <!-- Google Fonts Roboto -->
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap">
+      <!-- Bootstrap core CSS -->
+      <link rel="stylesheet" href="css/bootstrap.min.css">
+      <!-- Material Design Bootstrap -->
+      <link rel="stylesheet" href="css/mdb.min.css">
+      <!-- Your custom styles (optional) -->
+      <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body>
+
+      <footer class="page-footer font-small unique-color-dark">
+
+        <div style="background-color: #2f83a6;">
+          <div class="container-fluid">
+            <div class="row py-4 d-flex align-items-center">
+
+              <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
+                <h5 class="mb-0">Schedule</h5>
+              </div>
+
+              <div class="col-md-6 col-lg-7 text-center text-md-right">
+
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/julio-alberto-aguiar/"class="fb-ic">
+                  <i class="fab fa-linkedin white-text"> </i>
+                </a>
+                <!-- Hackerrank -->
+                <a href="https://www.hackerrank.com/jaguiarinfo" class="yt-ic">
+                  <i class="fab fa-hackerrank white-text">  </i>
+                </a>
+                <!--Email-->
+                <a href="mailto:julio.a.aguiar@gmail.com"class="ins-ic">
+                  <i class="fas fa-envelope white-text"> </i>
+                </a>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="container-fluid text-center text-md-left mt-3">
+          <div class="row mt-3">
+            <div class="col-md-5 col-lg-12 mb-3">
+
+              <!-- Editable table -->
+              <div class="card">
+                <h3 class="card-header text-red text-center font-weight-bold text-dark text-uppercase py-6">Appointments</h3>
+                <div class="card-body">
+
+                  <%= form_tag mostrar_path do %>
+                    <%= text_field_tag :tofind %>
+                  <%= submit_tag "Pesquisar" %>
+                  <% end %>
+
+                  <div id="table">
+                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                      <thead>
+                        <% if $datefind.nil? %>
+                          <% $datefind = Date.today %>
+                        <% end %>
+                        <tr>
+                          <th>Hora</th>
+                          <th>Segunda <%=$datefind %></th>
+                          <th></th>
+                          <th></th>
+                          <th>Terça <%=$datefind+1 %></th>
+                          <th></th>
+                          <th></th>
+                          <th>Quarta <%=$datefind+2 %></th>
+                          <th></th>
+                          <th></th>
+                          <th>Quinta <%=$datefind+3 %></th>
+                          <th></th>
+                          <th></th>
+                          <th>Sexta <%=$datefind+4 %></th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+
+                      <% for horaagenda in 8..18 %>
+                      <tr>
+                        <td><%= horaagenda %>:00</td>
+                        <% for dataagenda in $datefind..$datefind+4 %>
+
+                          <% booking = Booking.find_by datareserva: dataagenda, horareserva: horaagenda %>
+
+                          <% if !booking.nil? %>
+
+                            <% user = User.find_by id: booking.user %>
+
+                            <% if !user.nil? %>
+
+                              <td><%=
+                                if user.id == 1
+                                   user.name
+                                else
+                                  'Reservado para '+user.name
+                                end %>
+                              </td>
+                              <td>
+                                <% if ((user.id != 1 and user.id != current_user.id) or dataagenda < Date.today) %>
+                                  <i class="fas fa-pen " style="color:gray" ></i>
+                                <% else %>
+                                  <%= link_to edit_booking_path(booking) do %>
+                                    <i class="fas fa-pen " style="color:green" ></i>
+                                  <% end %>
+                                <% end %>
+                              </td>
+                              <td>
+                                <% if user.id != current_user.id or dataagenda < Date.today %>
+                                  <i class="far fa-trash-alt" style="color:gray" ></i>
+                                <% else %>
+                                  <%= link_to booking, method: :delete, remote:true, data: { confirm: 'Are you sure?' } do %>
+                                    <i class="far fa-trash-alt " style="color:red" ></i>
+                                  <% end %>
+                                <% end %>
+                              </td>
+
+                            <% end %>
+                          <% end %>
+
+
+                        <% end %>
+                      </tr>
+                    <% end %>
+
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Editable table -->
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="bottom">
+        <div style="background-color: #000000;">
+          <div class="footer text-center py-3"><%= Time.new.strftime("%d/%m/%Y - %H:%M") %> - <% if user_signed_in? %>
+            You are signed (<%= current_user.email %>)<% else %>Not logged in<% end %>
+          </div>
+        </div>
+      </div>
+
+    </footer>
+
+  </body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<body style="background-color:#1C2331;">
+
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Teste de Login</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap">
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <!-- Material Design Bootstrap -->
+  <link rel="stylesheet" href="css/mdb.min.css">
+  <!-- Your custom styles (optional) -->
+  <link rel="stylesheet" href="css/style.css">
+  </head>
+
+  <body>
+
+  <footer class="page-footer font-small unique-color-dark">
+
+  <div style="background-color: #2f83a6; ">
+    <div class="container">
+      <div class="row py-4 d-flex align-items-center">
+
+        <div class="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
+          <h5 class="mb-0">Schedule</h5>
+        </div>
+
+        <div class="col-md-6 col-lg-7 text-center text-md-right">
+
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/in/julio-alberto-aguiar/"class="fb-ic">
+            <i class="fab fa-linkedin white-text"> </i>
+          </a>
+          <!-- Hackerrank -->
+          <a href="https://www.hackerrank.com/jaguiarinfo" class="yt-ic">
+            <i class="fab fa-hackerrank white-text">  </i>
+          </a>
+          <!--Email-->
+          <a href="mailto:julio.a.aguiar@gmail.com"class="ins-ic">
+            <i class="fas fa-envelope white-text"> </i>
+          </a>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container text-center text-md-left mt-5">
+  <div class="row mt-3">
+    <div class="col-md-5 col-lg-6 mb-4">
+
+      <h6 class="text-uppercase font-weight-bold">Log in</h6>
+      <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 70px;">
+
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="field">
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        </div>
+
+        <div class="field">
+          <%= f.label :password %><br />
+          <%= f.password_field :password, autocomplete: "current-password" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="field">
+            <%= f.check_box :remember_me %>
+            <%= f.label :remember_me %>
+          </div>
+        <% end %>
+
+        <div class="actions">
+          <%= f.submit "Log in" %>
+        </div>
+      <% end %>
+
+      <%= render "devise/shared/links" %>
+      </div>
+
+      </div>
+
+    </div>
+
+    <div id="pbottom">
+      <div style="background-color: #000000;">
+        <div class="footer text-center py-3"><%= Time.new.strftime("%d/%m/%Y - %H:%M") %> - <% if user_signed_in? %>
+          You are signed (<%= current_user.email %>)<% else %>Not logged in<% end %>
+        </div>
+      </div>
+    </div>
+
+    </footer>
+
+  </body>
+
+</html>
