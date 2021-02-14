@@ -66,81 +66,80 @@
                   <%= submit_tag "Pesquisar" %>
                   <% end %>
 
-                  <div id="table">
-                    <table class="table table-bordered table-responsive-md table-striped text-center">
-                      <thead>
-                        <% if $datefind.nil? %>
-                          <% $datefind = Date.today %>
-                        <% end %>
+                  <% if !$datefind.nil? %>
+                    <div id="table">
+                      <table class="table table-bordered table-responsive-md table-striped text-center">
+                        <thead>
+                          <tr>
+                            <th>Hora</th>
+                            <th>Segunda <%=$datefind %></th>
+                            <th></th>
+                            <th></th>
+                            <th>Terça <%=$datefind+1 %></th>
+                            <th></th>
+                            <th></th>
+                            <th>Quarta <%=$datefind+2 %></th>
+                            <th></th>
+                            <th></th>
+                            <th>Quinta <%=$datefind+3 %></th>
+                            <th></th>
+                            <th></th>
+                            <th>Sexta <%=$datefind+4 %></th>
+                            <th></th>
+                            <th></th>
+                          </tr>
+                        </thead>
+
+                        <% for horaagenda in 8..23 %>
                         <tr>
-                          <th>Hora</th>
-                          <th>Segunda <%=$datefind %></th>
-                          <th></th>
-                          <th></th>
-                          <th>Terça <%=$datefind+1 %></th>
-                          <th></th>
-                          <th></th>
-                          <th>Quarta <%=$datefind+2 %></th>
-                          <th></th>
-                          <th></th>
-                          <th>Quinta <%=$datefind+3 %></th>
-                          <th></th>
-                          <th></th>
-                          <th>Sexta <%=$datefind+4 %></th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-                      </thead>
+                          <td><%= horaagenda %>:00</td>
+                          <% for dataagenda in $datefind..$datefind+4 %>
 
-                      <% for horaagenda in 8..18 %>
-                      <tr>
-                        <td><%= horaagenda %>:00</td>
-                        <% for dataagenda in $datefind..$datefind+4 %>
+                            <% booking = Booking.find_by datareserva: dataagenda, horareserva: horaagenda %>
 
-                          <% booking = Booking.find_by datareserva: dataagenda, horareserva: horaagenda %>
+                            <% if !booking.nil? %>
 
-                          <% if !booking.nil? %>
+                              <% user = User.find_by id: booking.user %>
 
-                            <% user = User.find_by id: booking.user %>
+                              <% if !user.nil? %>
 
-                            <% if !user.nil? %>
-
-                              <td><%=
-                                if user.id == 1
-                                   user.name
-                                else
-                                  'Reservado para '+user.name
-                                end %>
-                              </td>
-                              <td>
-                                <% if ((user.id != 1 and user.id != current_user.id) or dataagenda < Date.today) %>
-                                  <i class="fas fa-pen " style="color:gray" ></i>
-                                <% else %>
-                                  <%= link_to edit_booking_path(booking) do %>
-                                    <i class="fas fa-pen " style="color:green" ></i>
+                                <td><%=
+                                  if user.id == 1
+                                     user.name
+                                  else
+                                    'Reservado para '+user.name
+                                  end %>
+                                </td>
+                                <td>
+                                  <% if ((user.id != 1 and user.id != current_user.id) or dataagenda < Date.today) %>
+                                    <i class="fas fa-pen " style="color:gray" ></i>
+                                  <% else %>
+                                    <%= link_to edit_booking_path(booking) do %>
+                                      <i class="fas fa-pen " style="color:green" ></i>
+                                    <% end %>
                                   <% end %>
-                                <% end %>
-                              </td>
-                              <td>
-                                <% if user.id != current_user.id or dataagenda < Date.today %>
-                                  <i class="far fa-trash-alt" style="color:gray" ></i>
-                                <% else %>
-                                  <%= link_to booking, method: :delete, remote:true, data: { confirm: 'Are you sure?' } do %>
-                                    <i class="far fa-trash-alt " style="color:red" ></i>
+                                </td>
+                                <td>
+                                  <% if user.id != current_user.id or dataagenda < Date.today %>
+                                    <i class="far fa-trash-alt" style="color:gray" ></i>
+                                  <% else %>
+                                    <%= link_to booking, method: :delete, remote:true, data: { confirm: 'Are you sure?' } do %>
+                                      <i class="far fa-trash-alt " style="color:red" ></i>
+                                    <% end %>
                                   <% end %>
-                                <% end %>
-                              </td>
+                                </td>
 
+                              <% end %>
                             <% end %>
+
+
                           <% end %>
+                        </tr>
+                      <% end %>
 
-
-                        <% end %>
-                      </tr>
-                    <% end %>
-
-                  </table>
-                </div>
+                    </table>
+                  </div>
+                <% end %>
               </div>
             </div>
             <!-- Editable table -->
@@ -154,9 +153,11 @@
       <div id="bottom">
         <div style="background-color: #000000;">
           <div class="footer text-center py-3"><%= Time.new.strftime("%d/%m/%Y - %H:%M") %> - <% if user_signed_in? %>
-            You are signed (<%= current_user.email %>)<% else %>Not logged in<% end %>
+            You are signed (<%= current_user.email %>) - <% else %>Not logged in<% end %>
+            <%= link_to "Log out", destroy_user_session_path, :method => 'delete' %>
           </div>
         </div>
+
       </div>
 
     </footer>

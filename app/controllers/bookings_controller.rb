@@ -9,27 +9,43 @@ class BookingsController < ApplicationController
   def createdate
 
     if valid_date?(params[:tofind])
-
       $datefind = Date.parse(params[:tofind])
+    else
+      $datefind = Date.today
+    end
 
-      @user_in = current_user.id
-      #Booking.delete_all
+    case $datefind.wday #data de visualização sempre segunda
+      when 0
+        $datefind = $datefind + 1
+      when 6
+        $datefind = $datefind + 2
+      when 2
+        $datefind = $datefind - 1
+      when 3
+        $datefind = $datefind - 2
+      when 4
+        $datefind = $datefind - 3
+      when 5
+        $datefind = $datefind - 4
+    end
 
-      for dataagenda in $datefind..$datefind+4
-        for horaagenda in 8..23
-          agendado = Booking.find_by datareserva: dataagenda, horareserva: horaagenda
-          if agendado.nil?
-            if horaagenda == 10
-              idreserva = current_user.id
-            else
-              idreserva = 1
-            end
-            Booking.create(user_id: idreserva, datareserva: dataagenda, horareserva: horaagenda, descricao: '')
-          end
+    @user_in = current_user.id
+
+    for dataagenda in $datefind..$datefind+4
+      for horaagenda in 8..23
+        agendado = Booking.find_by datareserva: dataagenda, horareserva: horaagenda
+        if agendado.nil?
+          #if horaagenda == 10
+          #  idreserva = current_user.id
+          #else
+          #  idreserva = 1
+          #end
+          Booking.create(user_id: 1, datareserva: dataagenda, horareserva: horaagenda, descricao: '')
         end
       end
     end
 
+    #Booking.delete_all
     redirect_back(fallback_location: root_path)
   end
 
