@@ -6,6 +6,13 @@ class BookingsController < ApplicationController
     @bookings = Booking.all
   end
 
+  def edit_js
+    respond_to do |format|
+      format.html
+      format.js
+    end
+  end
+
   def createdate
 
     if valid_date?(params[:tofind])
@@ -59,6 +66,7 @@ class BookingsController < ApplicationController
   end
   # GET /bookings/1 or /bookings/1.json
   def show
+    redirect_back(fallback_location: root_path)
   end
 
   # GET /bookings/new
@@ -68,6 +76,10 @@ class BookingsController < ApplicationController
 
   # GET /bookings/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /bookings or /bookings.json
@@ -87,6 +99,9 @@ class BookingsController < ApplicationController
 
   # PATCH/PUT /bookings/1 or /bookings/1.json
   def update
+    if @booking.dataconfirm.to_s.blank?
+      @booking.dataconfirm = DateTime.now
+    end
     respond_to do |format|
       if @booking.update(booking_params)
         format.html { redirect_to @booking, notice: "Booking was successfully updated." }

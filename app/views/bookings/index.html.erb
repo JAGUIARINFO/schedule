@@ -52,6 +52,8 @@
           </div>
         </div>
 
+<div id="modal-window" class="modal hide fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+
         <div class="container-fluid text-center text-md-left mt-3">
           <div class="row mt-3">
             <div class="col-md-5 col-lg-12 mb-3">
@@ -111,10 +113,11 @@
                                   end %>
                                 </td>
                                 <td>
+
                                   <% if ((user.id != 1 and user.id != current_user.id) or dataagenda < Date.today) %>
                                     <i class="fas fa-pen " style="color:gray" ></i>
                                   <% else %>
-                                    <%= link_to edit_booking_path(booking) do %>
+                                    <%= link_to edit_booking_path(booking),  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'} do %>
                                       <i class="fas fa-pen " style="color:green" ></i>
                                     <% end %>
                                   <% end %>
